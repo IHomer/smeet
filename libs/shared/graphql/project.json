@@ -1,0 +1,15 @@
+{
+  "name": "shared-graphql",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/graphql/src",
+  "projectType": "library",
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx graphql-codegen --config ./libs/shared/graphql/codegen-config.yml"
+      }
+    }
+  },
+  "tags": []
+}

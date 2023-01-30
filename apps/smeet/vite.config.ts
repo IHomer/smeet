@@ -1,15 +1,15 @@
-import { appRootPath } from '@nrwl/tao/src/utils/app-root';
-import vue from '@vitejs/plugin-vue';
-import { defineConfig } from 'vite';
-import { join } from 'path';
-import baseTsConfig from '../../tsconfig.base.json';
+import { appRootPath } from "@nx-plus/vite/src/app-root";
+import vue from "@vitejs/plugin-vue";
+import { defineConfig } from "vite";
+import { join } from "path";
+import baseTsConfig from "../../tsconfig.base.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
   root: __dirname,
   build: {
-    outDir: '../../dist/apps/smeet',
+    outDir: "../../dist/apps/smeet",
     emptyOutDir: true,
   },
   resolve: {

@@ -1,27 +1,35 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+
+  {{ result }}
 </template>
 
-<script lang="ts">
+<script lang="ts" set>
 import { defineComponent } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
 
 export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  name: 'App'
 })
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<script lang="ts" setup>
+import HelloWorld from './components/HelloWorld.vue'
+import { useQuery } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+
+const { result } = useQuery(gql`
+      query getCountry {  
+        country(code: "NL") {
+          name
+          native
+          capital
+          emoji
+          currency
+          languages {
+            code
+            name
+          }
+        }
+      }
+    `)
+</script>

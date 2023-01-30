@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "api": {
+      "includes": [
+        "libs/shared/graphql/schema/*.graphql"
+      ]
+    }
+  },
+  "extensions": {
+    "additionalFileTypes": [ ".ts" ]
+  }
+}
+
