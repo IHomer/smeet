@@ -1,0 +1,8 @@
+overwrite: true
+
+generates:
+  ./libs/shared/graphql/src/lib/shared-graphql.ts:
+    schema:
+      - ./libs/shared/graphql/**/*.graphql
+    plugins:
+      - typescript

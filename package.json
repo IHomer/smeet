@@ -7,9 +7,12 @@
   },
   "private": true,
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.16.5",
+    "@graphql-codegen/typescript": "^2.8.8",
     "@nrwl/cypress": "^15.6.3",
     "@nrwl/eslint-plugin-nx": "15.6.3",
     "@nrwl/jest": "^15.6.3",
+    "@nrwl/js": "^15.6.3",
     "@nrwl/linter": "^15.6.3",
     "@nrwl/workspace": "15.6.3",
     "@ns3/nx-serverless": "*",

@@ -17,7 +17,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@smeet/shared/graphql": [
+        "libs/shared/graphql/src/index.ts"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
