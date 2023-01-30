@@ -29,6 +29,11 @@ provider:
   runtime: nodejs18.x
   stage: ${self:custom.stage}
   timeout: 20
+  deploymentBucket:
+    name: ${ssm:/serverless/smeet-${self:provider.stage}/deployment-bucket}
+  apiGateway:
+    restApiId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-id}
+    restApiRootResourceId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-root-resource-id}
   environment:
     APP_ENV: ${self:custom.stage}
     IS_PRODUCTION: ${param:production}
