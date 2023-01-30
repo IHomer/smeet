@@ -254,4 +254,6 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
+tmp
+
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains,node
