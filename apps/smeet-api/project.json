@@ -30,7 +30,11 @@
         "dist/apps/smeet-api"
       ],
       "dependsOn": [
-        "package"
+        {
+          "target": "package",
+          "projects": "self",
+          "params": "forward"
+        }
       ],
       "options": {
         "command": "deploy",
