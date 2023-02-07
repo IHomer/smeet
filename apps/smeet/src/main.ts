@@ -1,6 +1,7 @@
 import { createApp, provide, h } from 'vue';
 import App from './App.vue';
 import { DefaultApolloClient } from '@vue/apollo-composable';
+import piniaPersist from 'pinia-plugin-persist';
 
 import './index.css';
 
@@ -34,6 +35,7 @@ const app = createApp({
 });
 
 const pinia = createPinia();
+pinia.use(piniaPersist);
 
 app.use(pinia);
 
