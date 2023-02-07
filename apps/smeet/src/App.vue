@@ -1,35 +1,16 @@
 <template>
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
-
-  {{ result }}
+  <RegisterPage v-if="name === ''" />
+  <ChatPage v-else />
 </template>
 
-<script lang="ts" set>
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'App'
-})
-</script>
 
 <script lang="ts" setup>
-import HelloWorld from './components/HelloWorld.vue'
-import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { useProfileStore } from './store/profile.store';
+import RegisterPage from './pages/RegisterPage.vue'
+import ChatPage from './pages/ChatPage.vue'
+import { storeToRefs } from 'pinia';
 
-const { result } = useQuery(gql`
-      query getCountry {  
-        country(code: "NL") {
-          name
-          native
-          capital
-          emoji
-          currency
-          languages {
-            code
-            name
-          }
-        }
-      }
-    `)
+
+
+const {name} = storeToRefs(useProfileStore());
 </script>

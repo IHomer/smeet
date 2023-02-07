@@ -1,0 +1,23 @@
+<template>
+  <button
+    class="px-3 py-2 rounded transition-colors duration-150"
+    :class="{
+      'cursor-not-allowed bg-gray-300 text-gray-500': disabled,
+      'cursor-pointer bg-blue-500 text-white hover:bg-blue-700': !disabled,
+    }"
+    :disabled="disabled"
+    :type="type || 'button'"
+    @click="onClick"
+  >
+    <slot></slot>
+  </button>
+</template>
+
+<script lang="ts" setup>
+const props = defineProps(['type', 'disabled']);
+const emit = defineEmits(['click']);
+
+const onClick = () => {
+  emit('click');
+};
+</script>

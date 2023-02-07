@@ -7,3 +7,7 @@
 *::after {
   @apply box-border;
 }
+
+body {
+  @apply text-white bg-zinc-800;
+}
