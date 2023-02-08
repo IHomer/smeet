@@ -9,34 +9,53 @@ import {
   ApolloClient,
   createHttpLink,
   InMemoryCache,
+  NormalizedCacheObject,
 } from '@apollo/client/core';
 import { createPinia } from 'pinia';
+import axios from 'axios';
 
-// HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: 'https://countries.trevorblades.com/',
+async function uiConfig(
+  callback: (apolloClient: ApolloClient<NormalizedCacheObject>) => void
+) {
+  // Cache implementation
+  const cache = new InMemoryCache({ addTypename: true});
+
+  // import.meta is used in Vue
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const { VITE_STAGE } = import.meta.env;
+
+  const baseUrlConfig = `https://api.${VITE_STAGE}.smeet.ihomer.academy`;
+
+  const result = await axios.get(`${baseUrlConfig}/getConfig`);
+
+  const { appSyncUrl, appSyncApiKey } = result.data;
+
+  callback(
+    new ApolloClient({
+      link: createHttpLink({
+        uri: appSyncUrl,
+        headers: {
+          'X-API-KEY': appSyncApiKey,
+        },
+      }),
+      cache,
+    })
+  );
+}
+
+uiConfig((apolloClient) => {
+  const app = createApp({
+    setup() {
+      provide(DefaultApolloClient, apolloClient);
+    },
+    render: () => h(App),
+  });
+
+  const pinia = createPinia();
+  pinia.use(piniaPersist);
+
+  app.use(pinia);
+
+  app.mount('#app');
 });
-
-// Cache implementation
-const cache = new InMemoryCache();
-
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache,
-});
-
-const app = createApp({
-  setup() {
-    provide(DefaultApolloClient, apolloClient);
-  },
-  render: () => h(App),
-});
-
-const pinia = createPinia();
-pinia.use(piniaPersist);
-
-app.use(pinia);
-
-app.mount('#app');

@@ -40,14 +40,32 @@ export type Scalars = {
   AWSURL: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  listTest?: Maybe<Array<Maybe<Test>>>;
+export type Chat = {
+  message: Scalars['String'];
+  pk: Scalars['String'];
+  sk: Scalars['String'];
+  uid: Scalars['String'];
+  user: Scalars['ID'];
 };
 
-export type Test = {
-  __typename?: 'Test';
-  description: Scalars['String'];
-  id: Scalars['ID'];
+export type Mutation = {
+  __typename?: 'Mutation';
+  dummy?: Maybe<Scalars['String']>;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  listChats?: Maybe<Array<Maybe<Chat>>>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  dummy?: Maybe<Scalars['String']>;
+};
+
+export type User = {
   name: Scalars['String'];
+  pk: Scalars['String'];
+  sk: Scalars['String'];
+  uid: Scalars['String'];
 };
