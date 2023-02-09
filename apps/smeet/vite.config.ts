@@ -4,6 +4,8 @@ import { defineConfig } from "vite";
 import { join } from "path";
 import baseTsConfig from "../../tsconfig.base.json";
 
+const { STAGE } = process.env;
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
@@ -21,4 +23,13 @@ export default defineConfig({
       {}
     ),
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: `https://api.${STAGE}.smeet.ihomer.academy`,
+        changeOrigin: true
+      }
+    }
+  }
+
 });

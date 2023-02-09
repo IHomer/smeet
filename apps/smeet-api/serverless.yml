@@ -79,7 +79,7 @@ provider:
         - dynamodb:BatchGetItem
         - dynamodb:GetItem
         - dynamodb:DeleteItem
-        - dynamodb:PutItem 
+        - dynamodb:PutItem
         - dynamodb:Scan
         - dynamodb:Query
       Resource:
@@ -91,7 +91,7 @@ functions:
     events:
       - http:
           method: GET
-          path: /getConfig
+          path: /api/getConfig
   createUser:
     handler: src/handlers/users/createUser.handler
   listChats:
