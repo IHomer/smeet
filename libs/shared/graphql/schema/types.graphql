@@ -1,0 +1,14 @@
+type Chat {
+  pk: String! # TIME#2023-01-01T00:00:00.000Z#UID#1
+  sk: String! # CHAT
+  uid: String! # 1
+  message: String!
+  user: ID!
+}
+
+type User {
+  pk: String! # UID#1
+  sk: String! # USER
+  uid: String! # 1
+  name: String!
+}

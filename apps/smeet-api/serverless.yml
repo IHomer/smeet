@@ -2,20 +2,38 @@ service: smeet-api
 
 plugins:
   - 'serverless-bundle'
-  - serverless-offline
+  - serverless-appsync-plugin
 
 package:
   individually: true
 
 custom:
   stage: ${opt:stage, env:STAGE, 'dev'}
-  serverless-offline:
-    httpPort: 3333
-    lambdaPort: 2333
-    noPrependStageInUrl: true
   bundle:
     linting: false
     tsConfig: 'tsconfig.app.json'
+  appSync:
+    name: ${self:provider.stage}-smeet-api
+    authenticationType: API_KEY
+    apiKeys:
+      - name: default # name of the api key
+        description: 'Default api key'
+    schema:
+      - ../../libs/shared/graphql/schema/_query.graphql
+      - ../../libs/shared/graphql/schema/_subscription.graphql
+      - ../../libs/shared/graphql/schema/_mutation.graphql
+      - ../../libs/shared/graphql/schema/types.graphql
+    dataSources:
+      - type: AWS_LAMBDA
+        name: listChats
+        config:
+          functionName: listChats
+    mappingTemplates:
+      - dataSource: listChats
+        type: Query
+        field: listChats
+        request: false
+        response: false
 
 params:
   prod:
@@ -38,11 +56,17 @@ provider:
     APP_ENV: ${self:custom.stage}
     IS_PRODUCTION: ${param:production}
     NODE_OPTIONS: --enable-source-maps
+    APP_SYNC_URL:
+      Fn::GetAtt: [GraphQlApi, GraphQLUrl]
+    APP_SYNC_API_KEY:
+      Fn::GetAtt: [GraphQlApiKeydefault, ApiKey]
 
 functions:
-  foo:
-    handler: src/handlers/foo.handler
+  getConfig:
+    handler: src/handlers/config/getConfig.handler
     events:
       - http:
           method: GET
-          path: /foo
+          path: /getConfig
+  listChats:
+    handler: src/handlers/chats/listChats.handler
