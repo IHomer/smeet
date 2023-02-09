@@ -18,6 +18,7 @@ module "frontend" {
   source           = "../modules/frontend"
   namespace        = local.namespace
   parent_zone_name = local.parent_zone_name
+  api_gateway_url = module.api_gateway.api_gateway_url
   service_name     = "smeet"
 }
 
