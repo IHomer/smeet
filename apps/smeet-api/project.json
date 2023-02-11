@@ -12,23 +12,15 @@
     },
     "package": {
       "executor": "@ns3/nx-serverless:sls",
-      "outputs": [
-        "apps/smeet-api/.serverless",
-        "dist/apps/smeet-api"
-      ],
-      "dependsOn": [
-        "^build"
-      ],
+      "outputs": ["apps/smeet-api/.serverless", "dist/apps/smeet-api"],
+      "dependsOn": ["^build"],
       "options": {
         "command": "package"
       }
     },
     "deploy": {
       "executor": "@ns3/nx-serverless:sls",
-      "outputs": [
-        "apps/smeet-api/.serverless",
-        "dist/apps/smeet-api"
-      ],
+      "outputs": ["apps/smeet-api/.serverless", "dist/apps/smeet-api"],
       "dependsOn": [
         {
           "target": "package",
@@ -39,6 +31,20 @@
       "options": {
         "command": "deploy",
         "package": ".serverless"
+      }
+    },
+    "deploy-function": {
+      "executor": "@ns3/nx-serverless:sls",
+      "outputs": ["{projectRoot}/.serverless"],
+      "options": {
+        "command": "deploy function"
+      }
+    },
+    "logs": {
+      "executor": "@ns3/nx-serverless:sls",
+      "outputs": ["{projectRoot}/.serverless"],
+      "options": {
+        "command": "logs -t"
       }
     },
     "remove": {
@@ -53,9 +59,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/smeet-api/jest.config.ts",
         "passWithNoTests": true
@@ -69,13 +73,9 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/smeet-api/src/**/*.{ts,tsx,js,jsx}"
-        ]
+        "lintFilePatterns": ["apps/smeet-api/src/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },

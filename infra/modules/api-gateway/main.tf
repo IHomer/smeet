@@ -89,7 +89,7 @@ resource "aws_api_gateway_deployment" "api_deployment_api" {
   depends_on = [
     aws_api_gateway_integration.dummy
   ]
-  
+
   rest_api_id       = aws_api_gateway_rest_api.api.id
   stage_name        = terraform.workspace
   stage_description = ""
@@ -123,4 +123,8 @@ resource "aws_ssm_parameter" "rest_api_root_resource_id" {
   description = "Api Gateway Id needed for deployment"
   type        = "SecureString"
   value       = aws_api_gateway_rest_api.api.root_resource_id
+}
+
+output "api_gateway_url" {
+  value = local.api_domain_name
 }

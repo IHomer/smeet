@@ -27,11 +27,11 @@ custom:
       - type: AWS_LAMBDA
         name: createUser
         config:
-          functionName: createUser
+          functionName: createUserResolver
       - type: AWS_LAMBDA
         name: listChats
         config:
-          functionName: listChats
+          functionName: listChatsResolver
     mappingTemplates:
       - dataSource: createUser
         type: Mutation
@@ -43,12 +43,6 @@ custom:
         field: listChats
         request: false
         response: false
-
-params:
-  prod:
-    production: true
-  default:
-    production: false
 
 provider:
   name: aws
@@ -62,8 +56,7 @@ provider:
     restApiId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-id}
     restApiRootResourceId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-root-resource-id}
   environment:
-    APP_ENV: ${self:custom.stage}
-    IS_PRODUCTION: ${param:production}
+    STAGE: ${self:custom.stage}
     NODE_OPTIONS: --enable-source-maps
     APP_SYNC_URL:
       Fn::GetAtt: [GraphQlApi, GraphQLUrl]
@@ -71,19 +64,26 @@ provider:
       Fn::GetAtt: [GraphQlApiKeydefault, ApiKey]
     # Dynamo
     DYNAMO_USER_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:UpdateItem
-        - dynamodb:BatchGetItem
-        - dynamodb:GetItem
-        - dynamodb:DeleteItem
-        - dynamodb:PutItem 
-        - dynamodb:Scan
-        - dynamodb:Query
-      Resource:
-        -  ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore-arn}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:UpdateItem
+            - dynamodb:BatchGetItem
+            - dynamodb:GetItem
+            - dynamodb:DeleteItem
+            - dynamodb:PutItem
+            - dynamodb:Scan
+            - dynamodb:Query
+          Resource:
+            - ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore-arn}
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource:
+            - arn:aws:events:${self:provider.region}:${aws:accountId}:event-bus/${self:provider.stage}
 
 functions:
   getConfig:
@@ -91,8 +91,22 @@ functions:
     events:
       - http:
           method: GET
-          path: /getConfig
-  createUser:
-    handler: src/handlers/users/createUser.handler
-  listChats:
-    handler: src/handlers/chats/listChats.handler
+          path: /api/getConfig
+
+  # Resolvers
+  createUserResolver:
+    handler: src/resolvers/users/createUser.handler
+  listChatsResolver:
+    handler: src/resolvers/chats/listChats.handler
+
+  # Event Handlers
+  newUserEventHandler:
+    handler: src/eventHandlers/users/newUser.handler
+    events:
+      - eventBridge:
+          eventBus: ${self:provider.stage}
+          pattern:
+            source:
+              - users
+            detail-type:
+              - 'NewUser'
