@@ -44,12 +44,6 @@ custom:
         request: false
         response: false
 
-params:
-  prod:
-    production: true
-  default:
-    production: false
-
 provider:
   name: aws
   region: eu-central-1
@@ -62,8 +56,7 @@ provider:
     restApiId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-id}
     restApiRootResourceId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-root-resource-id}
   environment:
-    APP_ENV: ${self:custom.stage}
-    IS_PRODUCTION: ${param:production}
+    STAGE: ${self:custom.stage}
     NODE_OPTIONS: --enable-source-maps
     APP_SYNC_URL:
       Fn::GetAtt: [GraphQlApi, GraphQLUrl]
@@ -71,19 +64,26 @@ provider:
       Fn::GetAtt: [GraphQlApiKeydefault, ApiKey]
     # Dynamo
     DYNAMO_USER_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:UpdateItem
-        - dynamodb:BatchGetItem
-        - dynamodb:GetItem
-        - dynamodb:DeleteItem
-        - dynamodb:PutItem
-        - dynamodb:Scan
-        - dynamodb:Query
-      Resource:
-        -  ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore-arn}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:UpdateItem
+            - dynamodb:BatchGetItem
+            - dynamodb:GetItem
+            - dynamodb:DeleteItem
+            - dynamodb:PutItem
+            - dynamodb:Scan
+            - dynamodb:Query
+          Resource:
+            - ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore-arn}
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource:
+            - arn:aws:events:${self:provider.region}:${aws:accountId}:event-bus/${self:provider.stage}
 
 functions:
   getConfig:
@@ -92,7 +92,19 @@ functions:
       - http:
           method: GET
           path: /api/getConfig
+
   createUser:
-    handler: src/handlers/users/createUser.handler
+    handler: src/resolvers/users/createUser.handler
   listChats:
-    handler: src/handlers/chats/listChats.handler
+    handler: src/resolvers/chats/listChats.handler
+
+  newUser:
+    handler: src/eventHandlers/users/newUser.handler
+    events:
+      - eventBridge:
+          eventBus: ${self:provider.stage}
+          pattern:
+            source:
+              - users
+            detail-type:
+              - 'NewUser'

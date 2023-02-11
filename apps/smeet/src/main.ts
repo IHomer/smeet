@@ -20,11 +20,7 @@ async function uiConfig(
 ) {
   // Cache implementation
   const cache = new InMemoryCache({ addTypename: true });
-
-
-  const baseUrlConfig = `https://api.${VITE_STAGE}.smeet.ihomer.academy`;
-
-  const result = await axios.get(`${baseUrlConfig}/api/getConfig`);
+  const result = await axios.get(`/api/getConfig`);
 
   const { appSyncUrl, appSyncApiKey } = result.data;
 
