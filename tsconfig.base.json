@@ -16,9 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "@smeet/shared/graphql": ["libs/shared/graphql/src/index.ts"],
-      "@smeet/shared/server-side-apollo": [
-        "libs/shared/server-side-apollo/src/index.ts"
-      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

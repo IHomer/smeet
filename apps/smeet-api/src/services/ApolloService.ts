@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import {
   ApolloClient,
   ApolloLink,
@@ -7,15 +9,16 @@ import {
 } from '@apollo/client/core';
 import { AuthOptions, AUTH_TYPE, createAuthLink } from 'aws-appsync-auth-link';
 import { Credentials } from 'aws-sdk';
+import fetch from 'node-fetch';
 
-export class ApolloClientFactory {
+export class ApolloService {
   static instance: ApolloClient<NormalizedCacheObject>;
 
   static getInstance(): ApolloClient<NormalizedCacheObject> {
     if (!this.instance) {
-      this.instance = ApolloClientFactory.apolloClientInstance(
-        process.env.APP_SYNC_URL,
-        process.env.AWS_REGION
+      this.instance = ApolloService.apolloClientInstance(
+        process.env['APP_SYNC_URL']!,
+        process.env['AWS_REGION']!
       );
     }
 
@@ -27,9 +30,9 @@ export class ApolloClientFactory {
       type: AUTH_TYPE.AWS_IAM,
       credentials: () =>
         new Credentials(
-          process.env.AWS_ACCESS_KEY_ID,
-          process.env.AWS_SECRET_ACCESS_KEY,
-          process.env.AWS_SESSION_TOKEN
+          process.env['AWS_ACCESS_KEY_ID']!,
+          process.env['AWS_SECRET_ACCESS_KEY']!,
+          process.env['AWS_SESSION_TOKEN']!
         ),
     };
 
