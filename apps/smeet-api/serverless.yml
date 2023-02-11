@@ -27,11 +27,11 @@ custom:
       - type: AWS_LAMBDA
         name: createUser
         config:
-          functionName: createUser
+          functionName: createUserResolver
       - type: AWS_LAMBDA
         name: listChats
         config:
-          functionName: listChats
+          functionName: listChatsResolver
     mappingTemplates:
       - dataSource: createUser
         type: Mutation
@@ -93,12 +93,14 @@ functions:
           method: GET
           path: /api/getConfig
 
-  createUser:
+  # Resolvers
+  createUserResolver:
     handler: src/resolvers/users/createUser.handler
-  listChats:
+  listChatsResolver:
     handler: src/resolvers/chats/listChats.handler
 
-  newUser:
+  # Event Handlers
+  newUserEventHandler:
     handler: src/eventHandlers/users/newUser.handler
     events:
       - eventBridge:
