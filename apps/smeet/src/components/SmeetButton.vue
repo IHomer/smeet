@@ -10,11 +10,12 @@
     @click="onClick"
   >
     <slot></slot>
+    <font-awesome-icon v-if="loading" icon="spinner" spin class="ml-4" />
   </button>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps(['type', 'disabled']);
+const props = defineProps(['type', 'disabled', 'loading']);
 const emit = defineEmits(['click']);
 
 const onClick = () => {

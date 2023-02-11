@@ -25,10 +25,19 @@ custom:
       - ../../libs/shared/graphql/schema/types.graphql
     dataSources:
       - type: AWS_LAMBDA
+        name: createUser
+        config:
+          functionName: createUser
+      - type: AWS_LAMBDA
         name: listChats
         config:
           functionName: listChats
     mappingTemplates:
+      - dataSource: createUser
+        type: Mutation
+        field: createUser
+        request: false
+        response: false
       - dataSource: listChats
         type: Query
         field: listChats
@@ -60,6 +69,21 @@ provider:
       Fn::GetAtt: [GraphQlApi, GraphQLUrl]
     APP_SYNC_API_KEY:
       Fn::GetAtt: [GraphQlApiKeydefault, ApiKey]
+    # Dynamo
+    DYNAMO_USER_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:UpdateItem
+        - dynamodb:BatchGetItem
+        - dynamodb:GetItem
+        - dynamodb:DeleteItem
+        - dynamodb:PutItem 
+        - dynamodb:Scan
+        - dynamodb:Query
+      Resource:
+        -  ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore-arn}
 
 functions:
   getConfig:
@@ -68,5 +92,7 @@ functions:
       - http:
           method: GET
           path: /getConfig
+  createUser:
+    handler: src/handlers/users/createUser.handler
   listChats:
     handler: src/handlers/chats/listChats.handler

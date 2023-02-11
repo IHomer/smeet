@@ -20,3 +20,8 @@ module "frontend" {
   parent_zone_name = local.parent_zone_name
   service_name     = "smeet"
 }
+
+module "dynamodb" {
+  source           = "../modules/dynamodb"
+  namespace        = local.namespace
+}

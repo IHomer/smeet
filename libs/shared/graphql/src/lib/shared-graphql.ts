@@ -41,6 +41,7 @@ export type Scalars = {
 };
 
 export type Chat = {
+  __typename?: 'Chat';
   message: Scalars['String'];
   pk: Scalars['String'];
   sk: Scalars['String'];
@@ -64,8 +65,7 @@ export type Subscription = {
 };
 
 export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
   name: Scalars['String'];
-  pk: Scalars['String'];
-  sk: Scalars['String'];
-  uid: Scalars['String'];
 };

@@ -21,7 +21,13 @@
         :error="errors.name"
       />
 
-      <SmeetButton type="submit" :disabled="!meta.valid"> Submit </SmeetButton>
+      <SmeetButton
+        type="submit"
+        :disabled="!meta.valid || loading"
+        :loading="loading"
+      >
+        Submit
+      </SmeetButton>
     </form>
   </div>
 </template>
@@ -29,12 +35,14 @@
 <script lang="ts" setup>
 import SmeetButton from '../components/SmeetButton.vue';
 import SmeetInput from '../components/SmeetInput.vue';
-import { useProfileStore } from '../store/profile.store';
+import { useUserStore } from '../store/user.store';
 import { useField, useForm } from 'vee-validate';
 import { toFormValidator } from '@vee-validate/zod';
 import z from 'zod';
+import { useCreateUser } from '../queries/user/createUser';
 
-const { register } = useProfileStore();
+const { register } = useUserStore();
+const { mutate, loading } = useCreateUser();
 
 const formSchema = z.object({
   name: z.string().min(3, { message: 'Too short' }),
@@ -45,8 +53,11 @@ const { handleSubmit, errors, meta } = useForm({
   validationSchema,
 });
 const { value: name } = useField('name');
-const onSubmit = handleSubmit((values) => {
-  register(values.name);
-  ``;
+const onSubmit = handleSubmit(async (values) => {
+  const result = await mutate(values);
+
+  if (result?.data?.createUser) {
+    register(result?.data?.createUser);
+  }
 });
 </script>

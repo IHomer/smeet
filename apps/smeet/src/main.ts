@@ -2,6 +2,7 @@ import { createApp, provide, h } from 'vue';
 import App from './App.vue';
 import { DefaultApolloClient } from '@vue/apollo-composable';
 import piniaPersist from 'pinia-plugin-persist';
+import FontAwesomeIcon from './icons';
 
 import './index.css';
 
@@ -18,7 +19,7 @@ async function uiConfig(
   callback: (apolloClient: ApolloClient<NormalizedCacheObject>) => void
 ) {
   // Cache implementation
-  const cache = new InMemoryCache({ addTypename: true});
+  const cache = new InMemoryCache({ addTypename: true });
 
   // import.meta is used in Vue
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -56,6 +57,6 @@ uiConfig((apolloClient) => {
   pinia.use(piniaPersist);
 
   app.use(pinia);
-
+  app.component('font-awesome-icon', FontAwesomeIcon);
   app.mount('#app');
 });
