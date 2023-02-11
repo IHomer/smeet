@@ -60,6 +60,7 @@
     "@apollo/client": "^3.7.5",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-regular-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@vee-validate/zod": "^4.7.3",
     "@vue/apollo-composable": "^4.0.0-beta.1",

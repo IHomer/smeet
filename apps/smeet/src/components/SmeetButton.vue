@@ -10,7 +10,12 @@
     @click="onClick"
   >
     <slot></slot>
-    <font-awesome-icon v-if="loading" icon="spinner" spin class="ml-4" />
+    <font-awesome-icon
+      v-if="loading"
+      icon="spinner"
+      spin
+      class="ml-2"
+    />
   </button>
 </template>
 

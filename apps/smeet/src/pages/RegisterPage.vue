@@ -19,6 +19,7 @@
         v-model="name"
         label="Username"
         :error="errors.name"
+        :disabled="loading"
       />
 
       <SmeetButton

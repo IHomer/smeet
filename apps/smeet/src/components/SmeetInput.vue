@@ -9,6 +9,7 @@
       :title="label"
       :name="name"
       :type="type"
+      :disabled="disabled"
     />
   </div>
 </template>
@@ -16,7 +17,14 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-const props = defineProps(['modelValue', 'label', 'name', 'type', 'error']);
+const props = defineProps([
+  'modelValue',
+  'label',
+  'name',
+  'type',
+  'error',
+  'disabled',
+]);
 const emit = defineEmits(['update:modelValue']);
 
 const value = computed({
