@@ -18,9 +18,8 @@ export const useListChats = (
     gql`
       query {
         listChats {
-          pk
-          sk
-          uid
+          id
+          bot
           message
           user
         }

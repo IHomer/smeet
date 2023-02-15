@@ -42,16 +42,20 @@ export type Scalars = {
 
 export type Chat = {
   __typename?: 'Chat';
+  bot: Scalars['Boolean'];
+  id: Scalars['String'];
   message: Scalars['String'];
-  pk: Scalars['String'];
-  sk: Scalars['String'];
-  uid: Scalars['String'];
   user: Scalars['ID'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  dummy?: Maybe<Scalars['String']>;
+  createUser?: Maybe<User>;
+};
+
+
+export type MutationCreateUserArgs = {
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {

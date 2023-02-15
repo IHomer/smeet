@@ -1,3 +1,4 @@
 type Mutation {
   createUser(name: String): User
+  newChat(input: ChatEvent): Chat @aws_iam
 }

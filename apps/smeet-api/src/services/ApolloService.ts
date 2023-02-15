@@ -8,7 +8,7 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client/core';
 import { AuthOptions, AUTH_TYPE, createAuthLink } from 'aws-appsync-auth-link';
-import { fromEnv } from "@aws-sdk/credential-providers";
+import { fromEnv } from '@aws-sdk/credential-providers';
 import fetch from 'node-fetch';
 
 export class ApolloService {
@@ -28,7 +28,7 @@ export class ApolloService {
   static apolloClientInstance(url: string, region: string) {
     const auth: AuthOptions = {
       type: AUTH_TYPE.AWS_IAM,
-      credentials: () => fromEnv()
+      credentials: fromEnv,
     };
 
     const authConfig = {

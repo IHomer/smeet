@@ -3,6 +3,7 @@ import {
   DynamoDBDocumentClient,
   UpdateCommand,
   UpdateCommandInput,
+  ScanCommand,
 } from '@aws-sdk/lib-dynamodb';
 
 const marshallOptions = {
@@ -70,5 +71,13 @@ export class DynamoService {
 
     console.log('RESULT', result);
     return result;
+  }
+
+  static async scan<T>(table: string): Promise<T[]> {
+    const command = new ScanCommand({ TableName: table });
+    const result = await dynamoDb.send(command);
+
+    console.log('RESULT', result);
+    return result.Items as T[];
   }
 }

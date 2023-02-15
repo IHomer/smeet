@@ -24,6 +24,8 @@ custom:
       - ../../libs/shared/graphql/schema/_mutation.graphql
       - ../../libs/shared/graphql/schema/types.graphql
     dataSources:
+      - type: NONE
+        name: none
       - type: AWS_LAMBDA
         name: createUser
         config:
@@ -32,6 +34,7 @@ custom:
         name: listChats
         config:
           functionName: listChatsResolver
+    mappingTemplatesLocation: mapping-templates
     mappingTemplates:
       - dataSource: createUser
         type: Mutation
@@ -43,6 +46,11 @@ custom:
         field: listChats
         request: false
         response: false
+      - dataSource: none
+        type: Mutation
+        field: newChat
+        request: pushWithInput.request.vtl
+        response: response.vtl
 
 provider:
   name: aws
@@ -64,6 +72,7 @@ provider:
       Fn::GetAtt: [GraphQlApiKeydefault, ApiKey]
     # Dynamo
     DYNAMO_USER_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore}
+    DYNAMO_CHAT_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-chats-datastore}
   iam:
     role:
       statements:
@@ -79,6 +88,7 @@ provider:
             - dynamodb:Query
           Resource:
             - ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore-arn}
+            - ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-chats-datastore-arn}
         - Effect: Allow
           Action:
             - events:PutEvents
@@ -110,3 +120,13 @@ functions:
               - users
             detail-type:
               - 'NewUser'
+  newChatEventHandler:
+    handler: src/eventHandlers/chats/newChat.handler
+    events:
+      - eventBridge:
+          eventBus: ${self:provider.stage}
+          pattern:
+            source:
+              - chats
+            detail-type:
+              - 'NewChat'

@@ -1,9 +1,21 @@
 type Chat {
-  pk: String! # TIME#2023-01-01T00:00:00.000Z#UID#1
-  sk: String! # CHAT
-  uid: String! # 1
+  id: String! # 1
   message: String!
   user: ID!
+  bot: Boolean!
+}
+
+input ChatInput {
+  message: String!
+  user: ID!
+  bot: Boolean
+}
+
+input ChatEvent {
+  id: String! # 1
+  message: String!
+  user: ID!
+  bot: Boolean!
 }
 
 type User {
