@@ -1,15 +1,9 @@
 import { AppSyncResolverHandler } from 'aws-lambda';
 import { Chat } from '@smeet/shared/graphql';
+import { ChatDataService } from '../../services/ChatDataService';
 
 export const handler: AppSyncResolverHandler<unknown, Chat[]> = async () => {
-  // TODO: Use DynamoDB to get the chats
-  return [
-    {
-      pk: 'TIME#2023-01-01T00:00:00.000Z#UID#1',
-      sk: 'CHAT',
-      uid: '1',
-      message: 'Hello',
-      user: '1',
-    },
-  ];
+  // TODO: Sort based on updatedAt
+  const chats = await ChatDataService.list();
+  return chats;
 };

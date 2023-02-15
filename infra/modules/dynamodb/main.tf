@@ -34,3 +34,32 @@ resource "aws_ssm_parameter" "dynamodb_users_arn" {
     type        = "SecureString"
     value       = aws_dynamodb_table.users_table.arn
 }
+
+resource "aws_dynamodb_table" "chats_table" {
+    billing_mode = "PAY_PER_REQUEST"
+    name         = "${var.namespace}-chats"
+    hash_key     = "id"
+
+    attribute {
+        name = "id"
+        type = "S"
+    }
+
+    point_in_time_recovery {
+        enabled = var.point_in_time_recovery
+    }
+}
+
+resource "aws_ssm_parameter" "dynamodb_chats" {
+    name        = "/serverless/${var.namespace}/dynamodb-chats-datastore"
+    description = "DynamoDB chats datastore"
+    type        = "SecureString"
+    value       = aws_dynamodb_table.chats_table.name
+}
+
+resource "aws_ssm_parameter" "dynamodb_chats_arn" {
+    name        = "/serverless/${var.namespace}/dynamodb-chats-datastore-arn"
+    description = "DynamoDB chats datastore"
+    type        = "SecureString"
+    value       = aws_dynamodb_table.chats_table.arn
+}
