@@ -28,7 +28,7 @@ export class ApolloService {
   static apolloClientInstance(url: string, region: string) {
     const auth: AuthOptions = {
       type: AUTH_TYPE.API_KEY,
-      apiKey: process.env['APP_SYNC_API_KEY']!,
+      apiKey: process.env['APP_SYNC_API_KEY']!
     };
 
     const authConfig = {

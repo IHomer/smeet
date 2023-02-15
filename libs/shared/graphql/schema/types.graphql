@@ -3,6 +3,7 @@ type Chat {
   message: String!
   user: ID!
   bot: Boolean!
+  updatedAt: String!
 }
 
 input ChatInput {
@@ -16,6 +17,7 @@ input ChatEvent {
   message: String!
   user: ID!
   bot: Boolean!
+  updatedAt: String!
 }
 
 type User {

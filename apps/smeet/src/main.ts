@@ -8,12 +8,14 @@ import './index.css';
 
 import {
   ApolloClient,
-  createHttpLink,
+  ApolloLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client/core';
 import { createPinia } from 'pinia';
 import axios from 'axios';
+import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
+import { AuthOptions, AUTH_TYPE, createAuthLink } from 'aws-appsync-auth-link';
 
 async function uiConfig(
   callback: (apolloClient: ApolloClient<NormalizedCacheObject>) => void
@@ -24,14 +26,18 @@ async function uiConfig(
 
   const { appSyncUrl, appSyncApiKey } = result.data;
 
+  const auth: AuthOptions = {
+    type: AUTH_TYPE.API_KEY,
+    apiKey: appSyncApiKey,
+  };
+  const region = 'eu-central-1';
+
   callback(
     new ApolloClient({
-      link: createHttpLink({
-        uri: appSyncUrl,
-        headers: {
-          'X-API-KEY': appSyncApiKey,
-        },
-      }),
+      link: ApolloLink.from([
+        createAuthLink({ url: appSyncUrl, region, auth }),
+        createSubscriptionHandshakeLink({ url: appSyncUrl, region, auth }),
+      ]),
       cache,
     })
   );

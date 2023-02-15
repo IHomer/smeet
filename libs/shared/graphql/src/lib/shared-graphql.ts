@@ -45,17 +45,38 @@ export type Chat = {
   bot: Scalars['Boolean'];
   id: Scalars['String'];
   message: Scalars['String'];
+  updatedAt: Scalars['String'];
+  user: Scalars['ID'];
+};
+
+export type ChatEvent = {
+  bot: Scalars['Boolean'];
+  id: Scalars['String'];
+  message: Scalars['String'];
+  updatedAt: Scalars['String'];
+  user: Scalars['ID'];
+};
+
+export type ChatInput = {
+  bot?: InputMaybe<Scalars['Boolean']>;
+  message: Scalars['String'];
   user: Scalars['ID'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createUser?: Maybe<User>;
+  newChat?: Maybe<Chat>;
 };
 
 
 export type MutationCreateUserArgs = {
   name?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationNewChatArgs = {
+  input?: InputMaybe<ChatEvent>;
 };
 
 export type Query = {
@@ -65,7 +86,7 @@ export type Query = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  dummy?: Maybe<Scalars['String']>;
+  onNewChat?: Maybe<Chat>;
 };
 
 export type User = {
