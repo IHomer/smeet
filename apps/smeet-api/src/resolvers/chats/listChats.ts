@@ -3,7 +3,10 @@ import { Chat } from '@smeet/shared/graphql';
 import { ChatDataService } from '../../services/ChatDataService';
 
 export const handler: AppSyncResolverHandler<unknown, Chat[]> = async () => {
-  // TODO: Sort based on updatedAt
-  const chats = await ChatDataService.list();
+  const chats = await (
+    await ChatDataService.list()
+  ).sort((a, b) =>
+    a.updatedAt < b.updatedAt ? -1 : a.updatedAt > b.updatedAt ? 1 : 0
+  );
   return chats;
 };

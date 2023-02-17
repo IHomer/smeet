@@ -17,6 +17,11 @@ import axios from 'axios';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import { AuthOptions, AUTH_TYPE, createAuthLink } from 'aws-appsync-auth-link';
 
+import 'dayjs/locale/nl';
+import Dayjs from 'dayjs';
+
+Dayjs.locale('nl');
+
 async function uiConfig(
   callback: (apolloClient: ApolloClient<NormalizedCacheObject>) => void
 ) {
