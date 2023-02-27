@@ -1,7 +1,6 @@
 import { Chat, ChatInput } from '@smeet/shared/graphql';
 import { DynamoService } from './DynamoDataService';
 import { v4 as uuidv4 } from 'uuid';
-import { Object } from 'ts-toolbelt';
 
 const { DYNAMO_CHAT_TABLE = '' } = process.env;
 
