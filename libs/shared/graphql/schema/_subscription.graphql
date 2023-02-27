@@ -1,3 +1,3 @@
 type Subscription {
-  onNewChat: Chat @aws_subscribe(mutations: ["newChat"])
+  onNewMessage: Message @aws_subscribe(mutations: ["newMessage"])
 }

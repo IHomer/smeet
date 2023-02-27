@@ -1,21 +1,21 @@
-type Chat {
+type Message {
   id: String! # 1
   message: String!
-  user: ID!
+  user: String!
   bot: Boolean!
   updatedAt: String!
 }
 
-input ChatInput {
+input MessageInput {
   message: String!
-  user: ID!
+  user: String!
   bot: Boolean
 }
 
-input ChatEvent {
+input MessageEvent {
   id: String! # 1
   message: String!
-  user: ID!
+  user: String!
   bot: Boolean!
   updatedAt: String!
 }

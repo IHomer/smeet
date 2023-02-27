@@ -40,8 +40,8 @@ export type Scalars = {
   AWSURL: any;
 };
 
-export type Chat = {
-  __typename?: 'Chat';
+export type Message = {
+  __typename?: 'Message';
   bot: Scalars['Boolean'];
   id: Scalars['String'];
   message: Scalars['String'];
@@ -49,7 +49,7 @@ export type Chat = {
   user: Scalars['ID'];
 };
 
-export type ChatEvent = {
+export type MessageEvent = {
   bot: Scalars['Boolean'];
   id: Scalars['String'];
   message: Scalars['String'];
@@ -57,7 +57,7 @@ export type ChatEvent = {
   user: Scalars['ID'];
 };
 
-export type ChatInput = {
+export type MessageInput = {
   bot?: InputMaybe<Scalars['Boolean']>;
   message: Scalars['String'];
   user: Scalars['ID'];
@@ -66,7 +66,7 @@ export type ChatInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUser?: Maybe<User>;
-  newChat?: Maybe<Chat>;
+  newMessage?: Maybe<Message>;
 };
 
 
@@ -75,18 +75,18 @@ export type MutationCreateUserArgs = {
 };
 
 
-export type MutationNewChatArgs = {
-  input?: InputMaybe<ChatEvent>;
+export type MutationNewMessageArgs = {
+  input?: InputMaybe<MessageEvent>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  listChats?: Maybe<Array<Maybe<Chat>>>;
+  listMessages?: Maybe<Array<Maybe<Message>>>;
 };
 
 export type Subscription = {
   __typename?: 'Subscription';
-  onNewChat?: Maybe<Chat>;
+  onNewMessage?: Maybe<Message>;
 };
 
 export type User = {

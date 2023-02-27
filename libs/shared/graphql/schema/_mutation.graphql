@@ -1,4 +1,5 @@
 type Mutation {
   createUser(name: String): User
-  newChat(input: ChatEvent): Chat
+  createMessage(message: MessageInput): Message
+  newMessage(input: MessageEvent): Message
 }

@@ -5,7 +5,7 @@
         class="w-8 h-8 rounded text-center flex flex-col justify-center"
         :style="{ backgroundColor: userBgColor, color: userIconColor }"
       >
-        <font-awesome-icon :icon="['fas', 'robot']" v-if="chat.bot" />
+        <font-awesome-icon :icon="['fas', 'robot']" v-if="message.bot" />
         <font-awesome-icon :icon="['fas', 'user']" v-else />
       </div>
     </div>
@@ -13,14 +13,14 @@
       <div class="flex flex-col gap-1">
         <div class="flex">
           <div class="font-bold">
-            {{ chat.user }}
+            {{ message.user }}
           </div>
           <div class="ml-auto mr-2">
             {{ date }}
           </div>
         </div>
         <div>
-          {{ chat.message }}
+          {{ message.message }}
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Chat } from '@smeet/shared/graphql';
+import { Message } from '@smeet/shared/graphql';
 import { computed } from 'vue';
 import { stringToColor } from '../utils/colors';
 import Color from 'color';
@@ -36,13 +36,13 @@ import dayjs from 'dayjs';
 
 const props = withDefaults(
   defineProps<{
-    chat: Chat;
+    message: Message;
   }>(),
   {}
 );
 
-const date = computed(() => dayjs(props.chat.updatedAt).format('DD/MM HH:mm'));
-const userBgColor = computed(() => stringToColor(props.chat.user));
+const date = computed(() => dayjs(props.message.updatedAt).format('DD/MM HH:mm'));
+const userBgColor = computed(() => stringToColor(props.message.user));
 const userIconColor = computed(() =>
   Color(userBgColor.value).isDark() ? '#fff' : '#000'
 );
