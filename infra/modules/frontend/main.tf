@@ -20,7 +20,7 @@ variable "api_gateway_url" {
 }
 
 locals {
-  domain_name = "${terraform.workspace != "default" ? "${terraform.workspace}." : ""}${var.parent_zone_name}"
+  domain_name = "${terraform.workspace != "prod" ? "${terraform.workspace}." : ""}${var.parent_zone_name}"
 }
 
 data "aws_route53_zone" "zone" {
@@ -57,15 +57,15 @@ module "cdn" {
 
   custom_origins = [
     {
-      domain_name = var.api_gateway_url
-      origin_id   = "apigw"
-      origin_path = ""
+      domain_name    = var.api_gateway_url
+      origin_id      = "apigw"
+      origin_path    = ""
       custom_headers = []
       custom_origin_config = {
-        http_port              = 80
-        https_port             = 443
-        origin_protocol_policy = "https-only"
-        origin_ssl_protocols   = ["TLSv1.2"]
+        http_port                = 80
+        https_port               = 443
+        origin_protocol_policy   = "https-only"
+        origin_ssl_protocols     = ["TLSv1.2"]
         origin_keepalive_timeout = 30
         origin_read_timeout      = 60
       }
@@ -91,14 +91,14 @@ module "cdn" {
         "GET",
         "OPTIONS"
       ]
-      cache_policy_id = null
+      cache_policy_id          = null
       origin_request_policy_id = null
-      compress = false
+      compress                 = false
 
-      viewer_protocol_policy = "redirect-to-https"
-      min_ttl                = 0
-      default_ttl            = 0
-      max_ttl                = 0
+      viewer_protocol_policy     = "redirect-to-https"
+      min_ttl                    = 0
+      default_ttl                = 0
+      max_ttl                    = 0
       response_headers_policy_id = ""
 
       forward_query_string = true
@@ -109,9 +109,9 @@ module "cdn" {
       forward_cookies_whitelisted_names = []
 
       trusted_key_groups = []
-      trusted_signers = []
+      trusted_signers    = []
 
-      function_association = []
+      function_association        = []
       lambda_function_association = []
     }
   ]

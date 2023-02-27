@@ -7,7 +7,7 @@ variable "parent_zone_name" {
 }
 
 locals {
-  domain_name = "${terraform.workspace != "default" ? "${terraform.workspace}." : ""}${var.parent_zone_name}"
+  domain_name     = "${terraform.workspace != "prod" ? "${terraform.workspace}." : ""}${var.parent_zone_name}"
   api_domain_name = "api.${local.domain_name}"
 }
 

@@ -1,5 +1,5 @@
 locals {
-  namespace        = join("-", compact(["smeet", terraform.workspace != "default" ? terraform.workspace : ""]))
+  namespace        = join("-", ["smeet", terraform.workspace])
   parent_zone_name = "smeet.ihomer.academy"
 }
 
