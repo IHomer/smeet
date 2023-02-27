@@ -35,9 +35,9 @@ resource "aws_ssm_parameter" "dynamodb_users_arn" {
     value       = aws_dynamodb_table.users_table.arn
 }
 
-resource "aws_dynamodb_table" "chats_table" {
+resource "aws_dynamodb_table" "messages_table" {
     billing_mode = "PAY_PER_REQUEST"
-    name         = "${var.namespace}-chats"
+    name         = "${var.namespace}-messages"
     hash_key     = "id"
 
     attribute {
@@ -50,16 +50,16 @@ resource "aws_dynamodb_table" "chats_table" {
     }
 }
 
-resource "aws_ssm_parameter" "dynamodb_chats" {
-    name        = "/serverless/${var.namespace}/dynamodb-chats-datastore"
-    description = "DynamoDB chats datastore"
+resource "aws_ssm_parameter" "dynamodb_messages" {
+    name        = "/serverless/${var.namespace}/dynamodb-messages-datastore"
+    description = "DynamoDB messages datastore"
     type        = "SecureString"
-    value       = aws_dynamodb_table.chats_table.name
+    value       = aws_dynamodb_table.messages_table.name
 }
 
-resource "aws_ssm_parameter" "dynamodb_chats_arn" {
-    name        = "/serverless/${var.namespace}/dynamodb-chats-datastore-arn"
-    description = "DynamoDB chats datastore"
+resource "aws_ssm_parameter" "dynamodb_messages_arn" {
+    name        = "/serverless/${var.namespace}/dynamodb-messages-datastore-arn"
+    description = "DynamoDB messages datastore"
     type        = "SecureString"
-    value       = aws_dynamodb_table.chats_table.arn
+    value       = aws_dynamodb_table.messages_table.arn
 }

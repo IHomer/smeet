@@ -1,21 +1,21 @@
 import type { EventBridgeHandler } from 'aws-lambda';
 
 import type { User } from '@smeet/shared/graphql';
-import { ChatDataService } from '../../services/ChatDataService';
+import { MessageDataService } from '../../services/MessageDataService';
 import { EventBridgeService } from '../../services';
 
 export const handler: EventBridgeHandler<'NewUser', User, void> = async (
   event
 ) => {
-  const chat = await ChatDataService.create({
+  const message = await MessageDataService.create({
     message: `${event.detail.name} joined the chat!`,
     bot: true,
     user: 'joinbot',
   });
 
   await EventBridgeService.putEvents({
-    source: 'chats',
-    detailType: 'NewChat',
-    detail: chat,
+    source: 'messages',
+    detailType: 'NewMessage',
+    detail: message,
   });
 };

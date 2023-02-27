@@ -33,9 +33,13 @@ custom:
         config:
           functionName: createUserResolver
       - type: AWS_LAMBDA
-        name: listChats
+        name: createMessage
         config:
-          functionName: listChatsResolver
+          functionName: createMessageResolver
+      - type: AWS_LAMBDA
+        name: listMessages
+        config:
+          functionName: listMessagesResolver
     mappingTemplatesLocation: mapping-templates
     mappingTemplates:
       - dataSource: createUser
@@ -43,14 +47,19 @@ custom:
         field: createUser
         request: false
         response: false
-      - dataSource: listChats
+      - dataSource: createMessage
+        type: Mutation
+        field: createMessage
+        request: false
+        response: false
+      - dataSource: listMessages
         type: Query
-        field: listChats
+        field: listMessages
         request: false
         response: false
       - dataSource: none
         type: Mutation
-        field: newChat
+        field: newMessage
         request: pushWithInput.request.vtl
         response: response.vtl
 
@@ -74,7 +83,7 @@ provider:
       Fn::GetAtt: [GraphQlApiKeydefault, ApiKey]
     # Dynamo
     DYNAMO_USER_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore}
-    DYNAMO_CHAT_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-chats-datastore}
+    DYNAMO_MESSAGE_TABLE: ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-messages-datastore}
   iam:
     role:
       statements:
@@ -90,7 +99,7 @@ provider:
             - dynamodb:Query
           Resource:
             - ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-users-datastore-arn}
-            - ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-chats-datastore-arn}
+            - ${ssm:/serverless/smeet-${self:provider.stage}/dynamodb-messages-datastore-arn}
         - Effect: Allow
           Action:
             - events:PutEvents
@@ -108,8 +117,10 @@ functions:
   # Resolvers
   createUserResolver:
     handler: src/resolvers/users/createUser.handler
-  listChatsResolver:
-    handler: src/resolvers/chats/listChats.handler
+  listMessagesResolver:
+    handler: src/resolvers/messages/listMessages.handler
+  createMessageResolver:
+    handler: src/resolvers/messages/createMessage.handler
 
   # Event Handlers
   newUserEventHandler:
@@ -122,13 +133,13 @@ functions:
               - users
             detail-type:
               - 'NewUser'
-  newChatEventHandler:
-    handler: src/eventHandlers/chats/newChat.handler
+  newMessageEventHandler:
+    handler: src/eventHandlers/messages/newMessage.handler
     events:
       - eventBridge:
           eventBus: ${self:provider.stage}
           pattern:
             source:
-              - chats
+              - messages
             detail-type:
-              - 'NewChat'
+              - 'NewMessage'

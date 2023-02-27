@@ -1,25 +1,25 @@
-import { computed, ComputedRef, reactive, ref, Ref, watch } from 'vue';
+import { ref, Ref, watch } from 'vue';
 import { useQuery, useSubscription } from '@vue/apollo-composable';
 import { ReactiveFunction } from '@vue/apollo-composable/dist/util/ReactiveFunction';
-import { Chat } from '@smeet/shared/graphql';
+import { Message } from '@smeet/shared/graphql';
 import gql from 'graphql-tag';
 
-export const useListChats = (
+export const useListMessages = (
   options: ReactiveFunction<{ enabled?: boolean }> = () => ({})
 ): {
-  chats: Ref<Chat[]>;
+  messages: Ref<Message[]>;
   loading: Ref<boolean>;
 } => {
   const { enabled = true } = options();
 
-  const chats = ref<Chat[]>([]);
+  const messages = ref<Message[]>([]);
 
   const { result, loading } = useQuery<{
-    listChats: Chat[];
+    listMessages: Message[];
   }>(
     gql`
       query {
-        listChats {
+        listMessages {
           id
           bot
           message
@@ -36,15 +36,14 @@ export const useListChats = (
 
   watch(loading, (value) => {
     if (!value) {
-      chats.value =
-        result.value?.listChats || [];
+      messages.value = result.value?.listMessages || [];
     }
   });
 
-  const { result: subResult } = useSubscription<{ onNewChat: Chat }>(
+  const { result: subResult } = useSubscription<{ onNewMessage: Message }>(
     gql`
       subscription {
-        onNewChat {
+        onNewMessage {
           id
           bot
           message
@@ -57,14 +56,14 @@ export const useListChats = (
 
   watch(subResult, (data) => {
     console.log('data', data);
-    if (!data?.onNewChat) {
+    if (!data?.onNewMessage) {
       return;
     }
-    chats.value = [...chats.value, data?.onNewChat];
+    messages.value = [...messages.value, data?.onNewMessage];
   });
 
   return {
-    chats,
+    messages,
     loading,
   };
 };

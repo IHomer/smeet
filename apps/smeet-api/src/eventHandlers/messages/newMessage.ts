@@ -1,20 +1,20 @@
 import type { EventBridgeHandler } from 'aws-lambda';
 
-import type { Chat, MutationNewChatArgs } from '@smeet/shared/graphql';
+import type { Message, MutationNewMessageArgs } from '@smeet/shared/graphql';
 import { ApolloService } from '../../services/ApolloService';
 import gql from 'graphql-tag';
 
-export const handler: EventBridgeHandler<'NewChat', Chat, void> = async (
+export const handler: EventBridgeHandler<'NewMessage', Message, void> = async (
   event
 ) => {
   const apollo = ApolloService.getInstance();
 
   console.log('event', event);
 
-  const result = await apollo.mutate<unknown, MutationNewChatArgs>({
+  const result = await apollo.mutate<unknown, MutationNewMessageArgs>({
     mutation: gql`
-      mutation NewChatEvent($input: ChatEvent!) {
-        newChat(input: $input) {
+      mutation NewMessageEvent($input: MessageEvent!) {
+        newMessage(input: $input) {
           id
           bot
           message
