@@ -2,8 +2,11 @@ import {
   EventBridgeClient,
   PutEventsCommand,
 } from '@aws-sdk/client-eventbridge';
+import { captureAWSv3Client } from 'aws-xray-sdk';
 
-const client = new EventBridgeClient({ region: process.env['AWS_REGION'] });
+const client = captureAWSv3Client(
+  new EventBridgeClient({ region: process.env['AWS_REGION'] })
+);
 
 export interface EventEntry {
   source: string;

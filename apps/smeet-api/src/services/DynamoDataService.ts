@@ -1,10 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  UpdateCommand,
-  UpdateCommandInput,
-  ScanCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocument, UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
+import { captureAWSv3Client } from 'aws-xray-sdk';
 
 const marshallOptions = {
   // Whether to automatically convert empty strings, blobs, and sets to `null`.
@@ -22,10 +18,9 @@ const unmarshallOptions = {
 
 const translateConfig = { marshallOptions, unmarshallOptions };
 
-const dynamoDb = DynamoDBDocumentClient.from(
-  new DynamoDBClient({}),
-  translateConfig
-);
+const client = captureAWSv3Client(new DynamoDBClient({}));
+
+const dynamoDb = DynamoDBDocument.from(client, translateConfig);
 
 export class DynamoService {
   static async put<T extends { id: string }>(
@@ -66,16 +61,14 @@ export class DynamoService {
 
     console.log('PARAMS', params);
 
-    const command = new UpdateCommand(params);
-    const result = (await dynamoDb.send(command)).Attributes as unknown as T;
+    const result = (await dynamoDb.update(params)).Attributes as unknown as T;
 
     console.log('RESULT', result);
     return result;
   }
 
   static async scan<T>(table: string): Promise<T[]> {
-    const command = new ScanCommand({ TableName: table });
-    const result = await dynamoDb.send(command);
+    const result = await dynamoDb.scan({ TableName: table });
 
     console.log('RESULT', result);
     return result.Items as T[];

@@ -15,8 +15,7 @@ custom:
   appSync:
     name: ${self:provider.stage}-smeet-api
     authenticationType: API_KEY
-    additionalAuthenticationProviders:
-      - authenticationType: AWS_IAM
+    xrayEnabled: true
     apiKeys:
       - name: default # name of the api key
         description: 'Default api key'
@@ -74,6 +73,8 @@ provider:
   apiGateway:
     restApiId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-id}
     restApiRootResourceId: ${ssm:/serverless/smeet-${self:provider.stage}/rest-api-root-resource-id}
+  tracing:
+    lambda: true
   environment:
     STAGE: ${self:custom.stage}
     NODE_OPTIONS: --enable-source-maps
