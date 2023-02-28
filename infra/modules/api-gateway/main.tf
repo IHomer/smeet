@@ -90,17 +90,19 @@ resource "aws_api_gateway_deployment" "api_deployment_api" {
     aws_api_gateway_integration.dummy
   ]
 
-  rest_api_id       = aws_api_gateway_rest_api.api.id
-  stage_name        = terraform.workspace
-  stage_description = ""
-  variables = {
-    xray_tracing_enabled = true
-  }
+  rest_api_id = aws_api_gateway_rest_api.api.id
+}
+
+resource "aws_api_gateway_stage" "api_stage" {
+  deployment_id        = aws_api_gateway_deployment.api_deployment_api.id
+  rest_api_id          = aws_api_gateway_rest_api.api.id
+  stage_name           = terraform.workspace
+  xray_tracing_enabled = true
 }
 
 resource "aws_api_gateway_base_path_mapping" "api" {
   api_id      = aws_api_gateway_rest_api.api.id
-  stage_name  = aws_api_gateway_deployment.api_deployment_api.stage_name
+  stage_name  = aws_api_gateway_stage.api_stage.stage_name
   domain_name = aws_api_gateway_domain_name.api.domain_name
 }
 
